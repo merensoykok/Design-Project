@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VITON-HD Poster</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .authors {
+            font-size: 0.9rem;
+            color: #555;
+        }
+        .poster-image {
+            display: block;
+            max-width: 100%;
+            border: 4px solid #000;
+            margin: 0 auto 40px;
+        }
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            padding-top: 25px;
+            height: 0;
+            margin-bottom: 40px;
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        section {
+            margin-bottom: 40px;
+        }
+        section h2 {
+            font-size: 1.5rem;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+        }
+        .materials ul {
+            list-style: none;
+            padding: 0;
+        }
+        .materials ul li {
+            margin-bottom: 8px;
+        }
+        .materials a {
+            color: #1a0dab;
+            text-decoration: none;
+        }
+        .materials a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+        <h1>Enhancing Image-Based Fashion Assistants with Conditioned Diffusion Models</h1>
+        <div class="authors">
+            Ahmet UMAN <sup>2</sup>, Eyup MENEVSE<sup>1</sup>, Mehmet Eren SOYKOK<sup>2</sup> <br/>
+            <sup>1</sup>KAIST, <sup>2</sup>KAIST
+        </div>
+        </header>
+
+        <!-- Poster Görseli buraya -->
+        <img src="../Poster/poster.png" alt="Poster Image" class="poster-image" />
+
+        <!-- Video Embed -->
+        <div class="video-wrapper">
+        <iframe src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allowfullscreen></iframe>
+        </div>
+
+        <section class="abstract">
+        <h2>Abstract</h2>
+            <p>
+            OUR ABSTRACT  
+            </p>
+        </section>
+
+        <section class="materials">
+        <h2>Paper and Supplementary Material</h2>
+        <ul>
+            <li><a href="#">[Paper]</a></li>
+            <li><a href="#">[Code]</a></li>
+            <li><a href="#">[Supplementary Material]</a></li>
+        </ul>
+        </section>
+    </div>
+</body>
+</html>
