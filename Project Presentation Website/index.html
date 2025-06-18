@@ -1,115 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>VITON-HD Poster</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-            background: #fff;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        header h1 {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-        .authors {
-            font-size: 0.9rem;
-            color: #555;
-        }
-        .poster-image {
-            display: block;
-            max-width: 100%;
-            border: 4px solid #000;
-            margin: 0 auto 40px;
-        }
-        .video-wrapper {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 */
-            padding-top: 25px;
-            height: 0;
-            margin-bottom: 40px;
-        }
-        .video-wrapper iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-        section {
-            margin-bottom: 40px;
-        }
-        section h2 {
-            font-size: 1.5rem;
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 8px;
-            margin-bottom: 16px;
-        }
-        .materials ul {
-            list-style: none;
-            padding: 0;
-        }
-        .materials ul li {
-            margin-bottom: 8px;
-        }
-        .materials a {
-            color: #1a0dab;
-            text-decoration: none;
-        }
-        .materials a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <header>
-        <h1>Enhancing Image-Based Fashion Assistants with Conditioned Diffusion Models</h1>
-        <div class="authors">
-            Ahmet UMAN <sup>2</sup>, Eyup MENEVSE<sup>1</sup>, Mehmet Eren SOYKOK<sup>2</sup> <br/>
-            <sup>1</sup>KAIST, <sup>2</sup>KAIST
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>VITON-HD Poster</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+                margin: 0;
+                padding: 0;
+                background-color: #f9f9f9;
+                color: #333;
+            }
+            .container {
+                max-width: 900px;
+                margin: 0 auto;
+                padding: 20px;
+                background: #fff;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            }
+            header {
+                text-align: center;
+                margin-bottom: 40px;
+            }
+            header h1 {
+                font-size: 2rem;
+                margin-bottom: 10px;
+            }
+            .authors {
+                font-size: 0.9rem;
+                color: #555;
+            }
+            .poster-image {
+                display: block;
+                max-width: 100%;
+                border: 4px solid #000;
+                margin: 0 auto 40px;
+            }
+            .video-wrapper {
+                position: relative;
+                padding-bottom: 56.25%; /* 16:9 */
+                padding-top: 25px;
+                height: 0;
+                margin-bottom: 40px;
+            }
+            .video-wrapper iframe {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+            section {
+                margin-bottom: 40px;
+            }
+            section h2 {
+                font-size: 1.5rem;
+                border-bottom: 2px solid #ddd;
+                padding-bottom: 8px;
+                margin-bottom: 16px;
+            }
+            .materials ul {
+                display: flex;
+                gap: 12px;
+                padding: 0;
+                list-style: none;
+            }
+            .materials ul li {
+                margin: 0;
+            }
+            .btn {
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: #1a73e8;
+                color: #fff;
+                text-decoration: none;
+                font-size: 0.9rem;
+                border-radius: 4px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                transition: background-color 0.3s, transform 0.2s;
+            }
+            .btn:hover {
+                background-color: #1558b0;
+                transform: translateY(-2px);
+            }
+            /* Table styling */
+            .results-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+            .results-table th,
+            .results-table td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: center;
+            }
+            .results-table th {
+                background-color: #f2f2f2;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Enhancing Image-Based Fashion Assistants with Conditioned Diffusion Models</n>
+                <div class="authors">
+                    Eyup MENEVSE, Mehmet Eren SOYKOK, Ahmet UMAN<br/>
+                    SUPERVISOR: Prof. Dr. Nazli IKIZLER CINBIS<br/>
+                </div>
+            </header>
+
+            <section class="abstract">
+                <h2>Abstract</h2>
+                <p>
+                    Diffusion‑based generative models have opened new possibilities for personalised fashion technologies. We present a multimodal system that synthesises realistic clothings directly on a user’s image, conditioned simultaneously on (i) a free‑form natural‑language description of the desired outfit, (ii) a user‑defined spatial mask, and (iii) a semantic segmentation map of body parts. The proposed architecture couples a frozen Stable Diffusion backbone with a ControlNet branch that injects spatial information at every U‑Net resolution, while CLIP‑style text embeddings provide semantic guidance. Trained on scraped images and VITON‑HD dataset augmented with GPT‑4o fashion captions, our model achieves SSIM 0.843, PSNR 18.49 dB, LPIPS 0.073, FID 0.55 and KID 0.40±0.21—surpassing state‑of‑the‑art virtual try‑on methods.
+                </p>
+            </section>
+
+            <section class="results">
+                <h2>Quantitative Results</h2>
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>FID ↓</th>
+                            <th>KID (mean) ↓</th>
+                            <th>KID (std) ↓</th>
+                            <th>PSNR ↑</th>
+                            <th>SSIM ↑</th>
+                            <th>LPIPS ↓</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>PF-AFN</td>
+                            <td>6.55</td>
+                            <td>0.81</td>
+                            <td>0.312</td>
+                            <td>17.10</td>
+                            <td>0.882</td>
+                            <td>0.087</td>
+                        </tr>
+                        <tr>
+                            <td>FS-VTON</td>
+                            <td>6.17</td>
+                            <td>0.69</td>
+                            <td>0.285</td>
+                            <td>17.65</td>
+                            <td>0.886</td>
+                            <td><u>0.074</u></td>
+                        </tr>
+                        <tr>
+                            <td>GP-VTON</td>
+                            <td>6.01</td>
+                            <td>0.60</td>
+                            <td>0.292</td>
+                            <td>17.03</td>
+                            <td>0.885</td>
+                            <td>0.080</td>
+                        </tr>
+                        <tr>
+                            <td>HR-VITON</td>
+                            <td>5.70</td>
+                            <td>0.663</td>
+                            <td>0.259</td>
+                            <td>17.92</td>
+                            <td>0.888</td>
+                            <td>0.078</td>
+                        </tr>
+                        <tr>
+                            <td>DCI-VTON</td>
+                            <td>4.98</td>
+                            <td>0.589</td>
+                            <td>0.244</td>
+                            <td>18.10</td>
+                            <td>0.890</td>
+                            <td>0.077</td>
+                        </tr>
+                        <tr>
+                            <td>D4-VTON</td>
+                            <td><u>4.85</u></td>
+                            <td>0.556</td>
+                            <td><u>0.221</u></td>
+                            <td><strong>24.71</strong></td>
+                            <td><u>0.892</u></td>
+                            <td><strong>0.065</strong></td>
+                        </tr>
+                        <tr>
+                            <td>LaDI-VTON</td>
+                            <td>4.20</td>
+                            <td><strong>0.420</strong></td>
+                            <td>0.214</td>
+                            <td>18.42</td>
+                            <td>0.891</td>
+                            <td>0.076</td>
+                        </tr>
+                        <tr>
+                            <td>SD-VTON</td>
+                            <td>6.99</td>
+                            <td>0.98</td>
+                            <td>0.347</td>
+                            <td>17.80</td>
+                            <td>0.874</td>
+                            <td>0.101</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ours</strong></td>
+                            <td><strong>0.55</strong></td>
+                            <td><u>0.470</u></td>
+                            <td><strong>0.207</strong></td>
+                            <td>18.49</td>
+                            <td><strong>0.892</strong></td>
+                            <td><u>0.074</u></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            
+            <section class="video">
+                <h2>Video</h2>
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </section>
+
+            <section class="poster">
+                <h2>Poster</h2>
+                <img src="./Images/poster.png" alt="Poster Image" class="poster-image" />
+            </section>
+
+            <section class="materials">
+                <h2>Materials</h2>
+                <ul>
+                    <li><a href="#" class="btn">Paper</a></li>
+                    <li><a href="#" class="btn">Poster</a></li>
+                    <li><a href="https://github.com/merensoykok/Design-Project" class="btn">Github Code</a></li>
+                </ul>
+            </section>
+            
         </div>
-        </header>
-
-        <!-- Poster Görseli buraya -->
-        <img src="../Poster/poster.png" alt="Poster Image" class="poster-image" />
-
-        <!-- Video Embed -->
-        <div class="video-wrapper">
-        <iframe src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allowfullscreen></iframe>
-        </div>
-
-        <section class="abstract">
-        <h2>Abstract</h2>
-            <p>
-            OUR ABSTRACT  
-            </p>
-        </section>
-
-        <section class="materials">
-        <h2>Paper and Supplementary Material</h2>
-        <ul>
-            <li><a href="#">[Paper]</a></li>
-            <li><a href="#">[Code]</a></li>
-            <li><a href="#">[Supplementary Material]</a></li>
-        </ul>
-        </section>
-    </div>
-</body>
+    </body>
 </html>
