@@ -1,0 +1,219 @@
+.image-mask-editor-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.image-mask-editor {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #e0e0e0;
+  background: #f8f9fa;
+}
+
+.editor-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.close-editor-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #666;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.close-editor-btn:hover {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.editor-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #e0e0e0;
+  background: #fff;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.tool-selection {
+  display: flex;
+  gap: 8px;
+  background: #f8f9fa;
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.tool-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  background: transparent;
+  color: #666;
+}
+
+.tool-btn:hover {
+  background: #e9ecef;
+  color: #333;
+}
+
+.tool-btn.active {
+  background: #007bff;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+}
+
+.brush-control {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 140px;
+}
+
+.brush-control label {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.brush-control input[type="range"] {
+  width: 120px;
+}
+
+.editor-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.editor-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.clear-btn {
+  background: #f8f9fa;
+  color: #666;
+  border: 1px solid #e0e0e0;
+}
+
+.clear-btn:hover {
+  background: #e9ecef;
+  color: #333;
+}
+
+.save-btn {
+  background: #007bff;
+  color: white;
+}
+
+.save-btn:hover {
+  background: #0056b3;
+}
+
+.canvas-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: #f8f9fa;
+  overflow: auto;
+}
+
+.drawing-canvas {
+  max-width: 100%;
+  max-height: 100%;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: crosshair;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.instructions {
+  padding: 15px 20px;
+  background: #e3f2fd;
+  border-top: 1px solid #e0e0e0;
+}
+
+.instructions p {
+  margin: 0;
+  color: #1976d2;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .image-mask-editor-overlay {
+    padding: 10px;
+  }
+  
+  .editor-controls {
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+  }
+  
+  .tool-selection {
+    justify-content: center;
+  }
+  
+  .editor-buttons {
+    justify-content: center;
+  }
+  
+  .canvas-container {
+    padding: 10px;
+  }
+  
+  .brush-control {
+    align-items: center;
+  }
+} 
