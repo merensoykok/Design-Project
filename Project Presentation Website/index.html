@@ -105,17 +105,17 @@
     <body>
         <div class="container">
             <header>
-                <h1>Enhancing Image-Based Fashion Assistants with Conditioned Diffusion Models</n>
+                <h1>Enhancing Image-Based Fashion Assistants with Conditioned Diffusion Models</h1>
                 <div class="authors">
                     Eyup MENEVSE, Mehmet Eren SOYKOK, Ahmet UMAN<br/>
-                    SUPERVISOR: Prof. Dr. Nazli IKIZLER CINBIS<br/>
+                    SUPERVISOR: Prof. Dr. Nazli IKIZLER CINBIS
                 </div>
             </header>
 
             <section class="abstract">
                 <h2>Abstract</h2>
                 <p>
-                    Diffusion‑based generative models have opened new possibilities for personalised fashion technologies. We present a multimodal system that synthesises realistic clothings directly on a user’s image, conditioned simultaneously on (i) a free‑form natural‑language description of the desired outfit, (ii) a user‑defined spatial mask, and (iii) a semantic segmentation map of body parts. The proposed architecture couples a frozen Stable Diffusion backbone with a ControlNet branch that injects spatial information at every U‑Net resolution, while CLIP‑style text embeddings provide semantic guidance. Trained on scraped images and VITON‑HD dataset augmented with GPT‑4o fashion captions, our model achieves SSIM 0.843, PSNR 18.49 dB, LPIPS 0.073, FID 0.55 and KID 0.40±0.21—surpassing state‑of‑the‑art virtual try‑on methods.
+                    Diffusion-based generative models have opened new possibilities for personalised fashion technologies. We present a multimodal system that synthesises realistic clothings directly on a user’s image, conditioned simultaneously on (i) a free-form natural-language description of the desired outfit, (ii) a user-defined spatial mask, and (iii) a semantic segmentation map of body parts. The proposed architecture couples a frozen Stable Diffusion backbone with a ControlNet branch that injects spatial information at every U-Net resolution, while CLIP-style text embeddings provide semantic guidance. Trained on scraped images and VITON-HD dataset augmented with GPT-4o fashion captions, our model achieves SSIM 0.843, PSNR 18.49 dB, LPIPS 0.073, FID 0.55 and KID 0.40±0.21—surpassing state-of-the-art virtual try-on methods.
                 </p>
             </section>
 
@@ -125,101 +125,98 @@
                     <thead>
                         <tr>
                             <th>Method</th>
-                            <th>FID ↓</th>
-                            <th>KID (mean) ↓</th>
-                            <th>KID (std) ↓</th>
-                            <th>PSNR ↑</th>
-                            <th>SSIM ↑</th>
-                            <th>LPIPS ↓</th>
+                            <th>FID<sub>p</sub>↓</th>
+                            <th>KID<sub>p</sub>↓</th>
+                            <th>PSNR<sub>p</sub>↑</th>
+                            <th>SSIM<sub>p</sub>↑</th>
+                            <th>LPIPS<sub>p</sub>↓</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>PF-AFN</td>
-                            <td>6.55</td>
+                            <td>6.554</td>
                             <td>0.81</td>
-                            <td>0.312</td>
-                            <td>17.10</td>
-                            <td>0.882</td>
+                            <td>23.54</td>
+                            <td><u>0.888</u></td>
                             <td>0.087</td>
                         </tr>
                         <tr>
                             <td>FS-VTON</td>
-                            <td>6.17</td>
+                            <td>6.170</td>
                             <td>0.69</td>
-                            <td>0.285</td>
-                            <td>17.65</td>
+                            <td>23.79</td>
                             <td>0.886</td>
-                            <td><u>0.074</u></td>
+                            <td>0.074</td>
+                        </tr>
+                        <tr>
+                            <td>HR-VTON</td>
+                            <td>11.383</td>
+                            <td>3.52</td>
+                            <td>21.61</td>
+                            <td>0.865</td>
+                            <td>0.122</td>
+                        </tr>
+                        <tr>
+                            <td>SDAFN</td>
+                            <td>6.605</td>
+                            <td>0.83</td>
+                            <td>23.24</td>
+                            <td>0.880</td>
+                            <td>0.082</td>
                         </tr>
                         <tr>
                             <td>GP-VTON</td>
-                            <td>6.01</td>
+                            <td>6.031</td>
                             <td>0.60</td>
-                            <td>0.292</td>
-                            <td>17.03</td>
+                            <td>23.41</td>
                             <td>0.885</td>
                             <td>0.080</td>
                         </tr>
                         <tr>
-                            <td>HR-VITON</td>
-                            <td>5.70</td>
-                            <td>0.663</td>
-                            <td>0.259</td>
-                            <td>17.92</td>
-                            <td>0.888</td>
-                            <td>0.078</td>
+                            <td>LADI-VTON</td>
+                            <td>6.602</td>
+                            <td>1.09</td>
+                            <td>22.49</td>
+                            <td>0.866</td>
+                            <td>0.094</td>
                         </tr>
                         <tr>
                             <td>DCI-VTON</td>
-                            <td>4.98</td>
-                            <td>0.589</td>
-                            <td>0.244</td>
-                            <td>18.10</td>
-                            <td>0.890</td>
-                            <td>0.077</td>
-                        </tr>
-                        <tr>
-                            <td>D4-VTON</td>
-                            <td><u>4.85</u></td>
-                            <td>0.556</td>
-                            <td><u>0.221</u></td>
-                            <td><strong>24.71</strong></td>
-                            <td><u>0.892</u></td>
-                            <td><strong>0.065</strong></td>
-                        </tr>
-                        <tr>
-                            <td>LaDI-VTON</td>
-                            <td>4.20</td>
-                            <td><strong>0.420</strong></td>
-                            <td>0.214</td>
-                            <td>18.42</td>
-                            <td>0.891</td>
-                            <td>0.076</td>
+                            <td><u>5.521</u></td>
+                            <td>0.41</td>
+                            <td><u>24.01</u></td>
+                            <td>0.882</td>
+                            <td>0.080</td>
                         </tr>
                         <tr>
                             <td>SD-VTON</td>
-                            <td>6.99</td>
-                            <td>0.98</td>
-                            <td>0.347</td>
-                            <td>17.80</td>
+                            <td>6.986</td>
+                            <td>1.00</td>
+                            <td>22.73</td>
                             <td>0.874</td>
                             <td>0.101</td>
                         </tr>
                         <tr>
-                            <td><strong>Ours</strong></td>
-                            <td><strong>0.55</strong></td>
-                            <td><u>0.470</u></td>
-                            <td><strong>0.207</strong></td>
-                            <td>18.49</td>
+                            <td>D4-VTON</td>
+                            <td><strong>4.845</strong></td>
+                            <td><strong>0.04</strong></td>
+                            <td><strong>24.71</strong></td>
                             <td><strong>0.892</strong></td>
-                            <td><u>0.074</u></td>
+                            <td><strong>0.065</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ours</strong></td>
+                            <td>14.2044</td>
+                            <td><u>0.4</u></td>
+                            <td>18.49</td>
+                            <td>0.843</td>
+                            <td><u>0.073</u></td>
                         </tr>
                     </tbody>
                 </table>
             </section>
 
-            
             <section class="video">
                 <h2>Video</h2>
                 <div class="video-wrapper">
