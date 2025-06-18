@@ -13,6 +13,6 @@ npm start
 ```bash
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
-pip install fastapi uvicorn
+pip3 install -r requirements.txt 
 python3 run.py
 ```

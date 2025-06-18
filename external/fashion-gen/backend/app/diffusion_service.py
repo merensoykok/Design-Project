@@ -6,6 +6,11 @@ import base64
 from io import BytesIO
 import logging
 
+# Set cache directory for models to avoid re-downloading
+os.environ["HF_HOME"] = os.path.expanduser("~/.cache/huggingface")
+os.environ["TRANSFORMERS_CACHE"] = os.path.expanduser("~/.cache/huggingface/transformers")
+os.environ["HF_HUB_CACHE"] = os.path.expanduser("~/.cache/huggingface/hub")
+
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -32,7 +37,9 @@ class DiffusionService:
                     self.model_id,
                     torch_dtype=torch.float16 if self.device == "cuda" else torch.float32,
                     safety_checker=None,  # Disable safety checker for fashion images
-                    requires_safety_checker=False
+                    requires_safety_checker=False,
+                    cache_dir=os.path.expanduser("~/.cache/huggingface"),
+                    force_download=False  # Don't re-download if already cached
                 )
                 self.txt2img_pipeline = self.txt2img_pipeline.to(self.device)
                 
@@ -58,7 +65,9 @@ class DiffusionService:
                     self.inpaint_model_id,
                     torch_dtype=torch.float16 if self.device == "cuda" else torch.float32,
                     safety_checker=None,
-                    requires_safety_checker=False
+                    requires_safety_checker=False,
+                    cache_dir=os.path.expanduser("~/.cache/huggingface"),
+                    force_download=False  # Don't re-download if already cached
                 )
                 self.inpaint_pipeline = self.inpaint_pipeline.to(self.device)
                 

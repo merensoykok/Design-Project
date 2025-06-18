@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 from typing import Optional
 import asyncio
 from .diffusion_service import diffusion_service
+from .custom_diffusion_service import custom_diffusion_service
 
 load_dotenv()
 
@@ -26,7 +27,7 @@ client = AzureOpenAI(
 system_prompt = """You are an AI stylist and fashion prompt engineer. Your job is to translate a casual or vague user request into a detailed, specific outfit description suitable for a Stable Diffusion model.
 
 Guidelines:
-- Focus only on the outfit and clothing attributes. Ignore background, lighting, photo style, camera settings.
+- Focus only one part of the outfit and clothing attributes (that user wants to change). Ignore background, lighting, photo style, camera settings.
 - Use the user's message to infer context (weather, event, intent) and adjust the outfit accordingly.
 - Your output should describe:
   - Garment type(s) (e.g., T-shirt, formal jacket, linen shirt)
@@ -62,7 +63,7 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    return {"message": "Fashion Generation API with Stable Diffusion"}
+    return {"message": "Fashion Generation API with Custom ControlNet"}
 
 @app.get("/test-diffusion")
 async def test_diffusion():
@@ -89,6 +90,22 @@ async def test_diffusion():
             "message": f"Stable Diffusion test failed: {str(e)}"
         }
 
+@app.get("/test-custom-controlnet")
+async def test_custom_controlnet():
+    """Test endpoint to verify Custom ControlNet is working"""
+    try:
+        # This would need actual image data to test properly
+        return {
+            "status": "info",
+            "message": "Custom ControlNet service is loaded. Use /generate with mask data to test inpainting."
+        }
+    except Exception as e:
+        print(f"Custom ControlNet test failed: {str(e)}")
+        return {
+            "status": "error", 
+            "message": f"Custom ControlNet test failed: {str(e)}"
+        }
+
 @app.post("/generate")
 async def generate_fashion(request: Request, body: PromptRequest):
     user_input = body.prompt
@@ -96,7 +113,7 @@ async def generate_fashion(request: Request, body: PromptRequest):
     mask_data = body.maskData
     original_image = body.originalImage
     
-    # Handle mask data case - generate inpainted image
+    # Handle mask data case - use CUSTOM ControlNet model for inpainting
     if mask_data and original_image:
         try:
             # First get the GPT-generated fashion prompt
@@ -112,33 +129,33 @@ async def generate_fashion(request: Request, body: PromptRequest):
                     model=deployment
                 )
                 generated_prompt = response.choices[0].message.content.strip()
-                print(f"Generated Prompt with Mask: {generated_prompt}")
-                print(f"Starting Stable Diffusion inpainting...")
+                print(f"Generated Prompt for Custom ControlNet: {generated_prompt}")
+                print(f"Starting Custom ControlNet inpainting...")
                 
-                # Generate inpainted image using Stable Diffusion
+                # Generate inpainted image using YOUR CUSTOM ControlNet model
                 generated_image = await asyncio.get_event_loop().run_in_executor(
                     None, 
-                    diffusion_service.generate_inpaint_image,
-                    original_image,
+                    custom_diffusion_service.generate_controlnet_inpaint_image,
+                    original_image,  # This is original_image_data parameter
                     mask_data,
                     generated_prompt
                 )
                 
-                print(f"Stable Diffusion inpainting completed!")
+                print(f"Custom ControlNet inpainting completed!")
                 return {
                     "response": generated_prompt, 
                     "generatedImage": generated_image,
-                    "type": "inpaint"
+                    "type": "custom_controlnet_inpaint"
                 }
             else:
                 # Just return the mask for testing if no prompt provided
-                print(f"Received mask data for processing without text prompt")
-                return {"response": "Mask received for processing", "maskUrl": mask_data}
+                print(f"Received mask data for Custom ControlNet processing without text prompt")
+                return {"response": "Mask received for Custom ControlNet processing", "maskUrl": mask_data}
         except Exception as e:
-            print(f"Error processing mask/inpainting: {str(e)}")
-            return {"response": f"Error processing mask: {str(e)}", "maskUrl": mask_data}
+            print(f"Error processing mask with Custom ControlNet: {str(e)}")
+            return {"response": f"Error processing mask with Custom ControlNet: {str(e)}", "maskUrl": mask_data}
     
-    # Handle text-only case - generate image from scratch
+    # Handle text-only case - generate image from scratch using standard SD
     if user_input and not user_image and not mask_data:
         try:
             # Get GPT-generated fashion prompt
@@ -156,7 +173,7 @@ async def generate_fashion(request: Request, body: PromptRequest):
             print(f"Generated Prompt: {generated_prompt}")
             print(f"Starting Stable Diffusion text-to-image generation...")
             
-            # Generate image using Stable Diffusion
+            # Generate image using standard Stable Diffusion
             generated_image = await asyncio.get_event_loop().run_in_executor(
                 None, 
                 diffusion_service.generate_fashion_image,
