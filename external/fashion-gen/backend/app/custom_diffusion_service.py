@@ -1,6 +1,6 @@
 import os
 import torch
-from diffusers import ControlNetModel, StableDiffusionControlNetInpaintPipeline, UniPCMultistepScheduler
+from diffusers import ControlNetModel, StableDiffusionControlNetInpaintPipeline, StableDiffusionControlNetPipeline, UniPCMultistepScheduler
 from PIL import Image
 import base64
 from io import BytesIO
@@ -24,12 +24,14 @@ class CustomControlNetDiffusionService:
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         logger.info(f"Using device: {self.device}")
         
-        # Initialize pipeline as None - it'll be loaded when needed
+        # Initialize pipelines as None - they'll be loaded when needed
         self.controlnet_pipeline = None
+        self.text2img_pipeline = None
         
         # Model configurations from your notebook
         self.controlnet_model_id = "menevseyup/cnet-inpaint-15-05-2025"
         self.base_model_id = "botp/stable-diffusion-v1-5-inpainting"
+        self.text2img_base_model_id = "runwayml/stable-diffusion-v1-5"
     
     def load_controlnet_pipeline(self):
         """Load the ControlNet inpainting pipeline"""
@@ -92,6 +94,69 @@ class CustomControlNetDiffusionService:
                 logger.info("Custom ControlNet inpainting pipeline loaded successfully!")
             except Exception as e:
                 logger.error(f"Error loading ControlNet inpainting pipeline: {e}")
+                raise
+    
+    def load_text2img_pipeline(self):
+        """Load the ControlNet text-to-image pipeline"""
+        if self.text2img_pipeline is None:
+            logger.info("Loading Custom ControlNet text-to-image pipeline...")
+            
+            # Check if models are already cached
+            controlnet_cache_path = os.path.join(cache_dir, f"models--{self.controlnet_model_id.replace('/', '--')}")
+            text2img_cache_path = os.path.join(cache_dir, f"models--{self.text2img_base_model_id.replace('/', '--')}")
+            
+            if os.path.exists(controlnet_cache_path):
+                logger.info(f"Found cached ControlNet model at {controlnet_cache_path}")
+            else:
+                logger.info(f"ControlNet model not cached, will download to {controlnet_cache_path}")
+                
+            if os.path.exists(text2img_cache_path):
+                logger.info(f"Found cached text2img base model at {text2img_cache_path}")
+            else:
+                logger.info(f"Text2img base model not cached, will download to {text2img_cache_path}")
+            
+            try:
+                # Load ControlNet model with better caching
+                logger.info(f"Loading ControlNet from {self.controlnet_model_id}")
+                controlnet = ControlNetModel.from_pretrained(
+                    self.controlnet_model_id,
+                    torch_dtype=torch.float16 if self.device == "cuda" else torch.float32,
+                    cache_dir=cache_dir,
+                    local_files_only=False,
+                    force_download=False,
+                    resume_download=True
+                )
+                
+                # Load the ControlNet Text-to-Image Pipeline
+                logger.info(f"Loading text2img base model from {self.text2img_base_model_id}")
+                self.text2img_pipeline = StableDiffusionControlNetPipeline.from_pretrained(
+                    self.text2img_base_model_id,
+                    controlnet=controlnet,
+                    safety_checker=None,
+                    requires_safety_checker=False,
+                    torch_dtype=torch.float16 if self.device == "cuda" else torch.float32,
+                    cache_dir=cache_dir,
+                    local_files_only=False,
+                    force_download=False,
+                    resume_download=True
+                ).to(self.device)
+                
+                # Use UniPCMultistepScheduler as in your notebook
+                self.text2img_pipeline.scheduler = UniPCMultistepScheduler.from_config(
+                    self.text2img_pipeline.scheduler.config
+                )
+                
+                # Enable memory efficient features if using CUDA
+                if self.device == "cuda":
+                    try:
+                        self.text2img_pipeline.enable_attention_slicing()
+                        self.text2img_pipeline.enable_model_cpu_offload()
+                    except Exception as e:
+                        logger.warning(f"Could not enable memory optimizations: {e}")
+                    
+                logger.info("Custom ControlNet text-to-image pipeline loaded successfully!")
+            except Exception as e:
+                logger.error(f"Error loading ControlNet text-to-image pipeline: {e}")
                 raise
     
     def generate_controlnet_inpaint_image(self, original_image_data, mask_data, prompt, negative_prompt=None, num_inference_steps=30, guidance_scale=7.5):
@@ -176,6 +241,57 @@ class CustomControlNetDiffusionService:
             
         except Exception as e:
             logger.error(f"Error generating custom ControlNet inpainted image: {e}")
+            raise
+    
+    def generate_fashion_image(self, prompt, negative_prompt=None, num_inference_steps=30, guidance_scale=7.5, width=512, height=512):
+        """Generate a fashion image from text using your custom ControlNet model"""
+        try:
+            # Load text-to-image pipeline if not already loaded
+            self.load_text2img_pipeline()
+            
+            # Default negative prompt for better fashion results
+            if negative_prompt is None:
+                negative_prompt = "blurry, low quality, distorted, deformed, ugly, bad anatomy, bad proportions, extra limbs, watermark, signature, text, poor fabric texture, unrealistic clothing"
+            
+            # Enhanced prompt for better fashion results
+            enhanced_prompt = f"high quality, detailed, professional fashion, {prompt}, realistic fabric texture, well-fitted clothing, natural lighting"
+            
+            # Create a simple control image (edge map) for ControlNet
+            # For text-to-image, we'll create a minimal control input
+            import numpy as np
+            control_image = Image.fromarray(np.zeros((height, width, 3), dtype=np.uint8))
+            
+            logger.info(f"Generating custom ControlNet fashion image with prompt: {enhanced_prompt}")
+            
+            # Generate image with proper context manager
+            with torch.autocast(self.device) if self.device == "cuda" else torch.no_grad():
+                # Set generator for reproducible results
+                generator = torch.Generator(device=self.device).manual_seed(42)
+                
+                result = self.text2img_pipeline(
+                    prompt=enhanced_prompt,
+                    negative_prompt=negative_prompt,
+                    image=control_image,
+                    num_inference_steps=num_inference_steps,
+                    guidance_scale=guidance_scale,
+                    controlnet_conditioning_scale=0.5,  # Lower conditioning for text-to-image
+                    width=width,
+                    height=height,
+                    generator=generator
+                )
+            
+            image = result.images[0]
+            
+            # Convert to base64 for frontend
+            buffered = BytesIO()
+            image.save(buffered, format="PNG")
+            img_base64 = base64.b64encode(buffered.getvalue()).decode()
+            
+            logger.info("Custom ControlNet fashion image generated successfully!")
+            return f"data:image/png;base64,{img_base64}"
+            
+        except Exception as e:
+            logger.error(f"Error generating custom ControlNet fashion image: {e}")
             raise
 
 # Global instance

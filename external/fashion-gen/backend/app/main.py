@@ -155,7 +155,7 @@ async def generate_fashion(request: Request, body: PromptRequest):
             print(f"Error processing mask with Custom ControlNet: {str(e)}")
             return {"response": f"Error processing mask with Custom ControlNet: {str(e)}", "maskUrl": mask_data}
     
-    # Handle text-only case - generate image from scratch using standard SD
+    # Handle text-only case - generate image from scratch using custom ControlNet
     if user_input and not user_image and not mask_data:
         try:
             # Get GPT-generated fashion prompt
@@ -171,20 +171,20 @@ async def generate_fashion(request: Request, body: PromptRequest):
             )
             generated_prompt = response.choices[0].message.content.strip()
             print(f"Generated Prompt: {generated_prompt}")
-            print(f"Starting Stable Diffusion text-to-image generation...")
+            print(f"Starting Custom ControlNet text-to-image generation...")
             
-            # Generate image using standard Stable Diffusion
+            # Generate image using YOUR CUSTOM ControlNet model
             generated_image = await asyncio.get_event_loop().run_in_executor(
                 None, 
-                diffusion_service.generate_fashion_image,
+                custom_diffusion_service.generate_fashion_image,
                 generated_prompt
             )
             
-            print(f"Stable Diffusion text-to-image completed!")
+            print(f"Custom ControlNet text-to-image completed!")
             return {
                 "response": generated_prompt,
                 "generatedImage": generated_image,
-                "type": "text2img"
+                "type": "custom_controlnet_text2img"
             }
         except Exception as e:
             print(f"Error generating image: {str(e)}")
